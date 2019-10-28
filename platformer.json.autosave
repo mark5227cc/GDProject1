@@ -13,7 +13,7 @@
     "macExecutableFilename": "",
     "orientation": "landscape",
     "packageName": "com.example.platformer",
-    "projectFile": "C:\\Users\\user\\Documents\\GitHub\\GDProject1\\platformer.json",
+    "projectFile": "E:\\GDProject1\\platformer.json",
     "scaleMode": "linear",
     "sizeOnStartupMode": "adaptWidth",
     "useExternalSourceFiles": false,
@@ -696,7 +696,7 @@
         "gridWidth": 70,
         "snap": true,
         "windowMask": true,
-        "zoomFactor": 0.1706
+        "zoomFactor": 0.6026
       },
       "objectsGroups": [
         {
@@ -732,6 +732,10 @@
         {
           "name": "Score",
           "value": "0"
+        },
+        {
+          "name": "Hiscore",
+          "value": "\"\""
         }
       ],
       "instances": [
@@ -4021,6 +4025,21 @@
                 "PlayerHitBox"
               ],
               "subInstructions": []
+            },
+            {
+              "type": {
+                "inverted": false,
+                "value": "SendRequest"
+              },
+              "parameters": [
+                "\"http://localhost\"",
+                "\"/hiscore\"",
+                "",
+                "\"GET\"",
+                "",
+                "Hiscore"
+              ],
+              "subInstructions": []
             }
           ],
           "events": []
@@ -4987,6 +5006,10 @@
         {
           "name": "JumpCount",
           "value": "0"
+        },
+        {
+          "name": "Result",
+          "value": "\"\""
         }
       ],
       "instances": [
@@ -7979,7 +8002,82 @@
               "subInstructions": []
             }
           ],
-          "events": []
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::Standard",
+              "conditions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "VarScene"
+                  },
+                  "parameters": [
+                    "Score",
+                    ">=",
+                    "500"
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "actions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "SendRequest"
+                  },
+                  "parameters": [
+                    "\"http://localhost\"",
+                    "\"/save\"",
+                    "\"name=abc&score=\"+VariableString(Score)",
+                    "\"POST\"",
+                    "\"application/x-www-form-urlencoded\"",
+                    "Result"
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "events": []
+            },
+            {
+              "disabled": true,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::Standard",
+              "conditions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "VarScene"
+                  },
+                  "parameters": [
+                    "Score",
+                    ">=",
+                    "500"
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "actions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "SendRequest"
+                  },
+                  "parameters": [
+                    "\"http://localhost\"",
+                    "\"/save\"",
+                    "ToJSON(Score)",
+                    "\"POST\"",
+                    "\"application/json\"",
+                    "Result"
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "events": []
+            }
+          ]
         }
       ]
     },
@@ -8003,6 +8101,40 @@
                 "Score",
                 "=",
                 "\"x \"+ToString(Variable(Score))"
+              ],
+              "subInstructions": []
+            }
+          ],
+          "events": []
+        },
+        {
+          "disabled": false,
+          "folded": false,
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "inverted": false,
+                "value": "VarSceneTxt"
+              },
+              "parameters": [
+                "Hiscore",
+                "!=",
+                "\"\""
+              ],
+              "subInstructions": []
+            }
+          ],
+          "actions": [
+            {
+              "type": {
+                "inverted": false,
+                "value": "TextObject::String"
+              },
+              "parameters": [
+                "Score",
+                "=",
+                "\"Highest score: \"+VariableString(Hiscore)"
               ],
               "subInstructions": []
             }
